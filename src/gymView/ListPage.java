@@ -26,7 +26,7 @@ public  class ListPage extends javax.swing.JFrame implements GymInterface {
         DefaultTableModel model= (DefaultTableModel)listTable.getModel();
             try {
                 Statement smt = con.createStatement();
-                ResultSet rs = smt.executeQuery("select * from newmembers");
+                ResultSet rs = smt.executeQuery("select * from newmembers where status = 1");
                 while(rs.next())
                 {
                     model.addRow(new Object []{rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10),rs.getInt(11)});

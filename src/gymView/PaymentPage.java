@@ -84,7 +84,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
         amountToPayPerMonthTextField = new javax.swing.JTextField();
         emailTextField = new javax.swing.JTextField();
         backButton = new javax.swing.JButton();
-        saveButton = new javax.swing.JButton();
+        payButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
         dateLabel = new javax.swing.JLabel();
         homeButton = new javax.swing.JButton();
@@ -104,6 +104,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
         jLabel2.setText("Member ID :");
 
         memberIdTextField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        memberIdTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         memberIdTextField.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         searchButton.setBackground(new java.awt.Color(0, 204, 255));
@@ -163,13 +164,13 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
             }
         });
 
-        saveButton.setBackground(new java.awt.Color(0, 204, 255));
-        saveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imageAndGifs/icons8-save-30.png"))); // NOI18N
-        saveButton.setText("Save");
-        saveButton.setMinimumSize(new java.awt.Dimension(93, 39));
-        saveButton.addActionListener(new java.awt.event.ActionListener() {
+        payButton.setBackground(new java.awt.Color(0, 204, 255));
+        payButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imageAndGifs/icons8-save-30.png"))); // NOI18N
+        payButton.setText("Pay");
+        payButton.setMinimumSize(new java.awt.Dimension(93, 39));
+        payButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+                payButtonActionPerformed(evt);
             }
         });
 
@@ -183,7 +184,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
             }
         });
 
-        dateLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        dateLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         dateLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -196,7 +197,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
                         .addGap(73, 73, 73)
                         .addComponent(backButton)
                         .addGap(18, 18, 18)
-                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(631, 631, 631)
                         .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -264,7 +265,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backButton)
-                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(resetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(22, 22, 22))
         );
@@ -344,7 +345,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
-        tableDetails();
+        
         int checkid=0;
         String id=memberIdTextField.getText();
         String month= dateLabel.getText();
@@ -360,18 +361,20 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
                 mobileNumberTextField.setText(rs.getString(4));
                 emailTextField.setText(rs.getString(5));
                 amountToPayPerMonthTextField.setText(String.valueOf(rs.getInt(11)));
-                
+                tableDetails();
             }
             if(checkid==0)
             {
                 JOptionPane.showMessageDialog(null,"Member ID does not exit" );
+                setVisible(false);
+                new PaymentPage().setVisible(true);
             } 
             
-            ResultSet rs1= smt.executeQuery("select * from payment inner join newmembers where payment.month='"+month+"' and payment.id='"+id+"' and newmembers.id='"+id+"'");
+            ResultSet rs1= smt.executeQuery("select * from payment inner join newmembers where payment.month='"+month+"' and payment.id='"+id+"' and newmembers.id='"+id+"' and newmembers.status=1");
             
             while(rs1.next())
             {
-                saveButton.setVisible(false);
+                payButton.setVisible(false);
                 JOptionPane.showMessageDialog(null, "payment is already done for this month");
                 setVisible(false);
                 new PaymentPage().setVisible(true);
@@ -380,7 +383,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
         // TODO add your handling code here:
         
         String id= memberIdTextField.getText();
@@ -403,7 +406,7 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
         } catch (Exception e) {
             JOptionPane.showConfirmDialog(null,e);
         }
-    }//GEN-LAST:event_saveButtonActionPerformed
+    }//GEN-LAST:event_payButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:
@@ -436,8 +439,8 @@ public class PaymentPage extends javax.swing.JFrame implements GymInterface {
     private javax.swing.JTextField memberIdTextField;
     private javax.swing.JTextField mobileNumberTextField;
     private javax.swing.JTextField nameTextField;
+    private javax.swing.JButton payButton;
     private javax.swing.JButton resetButton;
-    private javax.swing.JButton saveButton;
     private javax.swing.JButton searchButton;
     // End of variables declaration//GEN-END:variables
 }
